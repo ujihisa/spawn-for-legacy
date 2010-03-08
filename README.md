@@ -1,9 +1,10 @@
 # Spawn for Legacy
 
-Kernel.spawn in ruby 1.9 solves all issues on asynchronous executions.[1](http://ujihisa.blogspot.com/2010/03/how-to-run-external-command.html)[2](http://ujihisa.blogspot.com/2010/03/all-about-spawn.html)
+Kernel.spawn in ruby 1.9 solves all issues on asynchronous executions[[1]](http://ujihisa.blogspot.com/2010/03/how-to-run-external-command.html)[[2]](http://ujihisa.blogspot.com/2010/03/all-about-spawn.html).
 But ruby 1.8, the legacy version of MRI, is still used on many environments.
 
 This library provides `spawn()` which is almost perfectly compatible with ruby 1.9's.
+This library is pure ruby; you don't need to build it.
 
 ## Install
 
