@@ -105,4 +105,8 @@ if RUBY_VERSION < '1.9'
   def spawn(*x)
     SFL.new(*x).run
   end
+
+  def Process.spawn(*x)
+    SFL.new(*x).run
+  end
 end
