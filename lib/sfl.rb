@@ -110,3 +110,21 @@ if RUBY_VERSION < '1.9'
     SFL.new(*x).run
   end
 end
+
+if RUBY_VERSION <= '1.8.6'
+  class Array
+    alias orig_flatten flatten
+
+    def flatten(depth = -1)
+      if depth < 0
+        orig_flatten
+      elsif depth == 0
+        self
+      else
+        inject([]) {|m, i|
+          Array === i ? m + i : m << i
+        }.flatten(depth - 1)
+      end
+    end
+  end
+end

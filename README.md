@@ -30,6 +30,16 @@ If your ruby is 1.9, `require 'sfl'` doesn't do anything. If your ruby is 1.8, t
 * At first I tried to use the name `spawn` as this gem library name, but the name was already used. The `spawn` gem library does not mean ruby 1.9's `spawn` at all.
 * Ruby 1.9's `open3` library, based on `spawn`, is very useful. I would like to port `open3` to ruby 1.8 in my future.
 
+## Supports
+
+* (On UNIX) MRI 1.8.6, 1.8.7, 1.9.1, 1.9.2pre
+* (On Windows) MRI 1.9.1, 1.9.2pre
+
+Currently there are no supports on:
+
+* MRI 1.8 on Windows
+* Other Ruby implementations such as JRuby, Rubinius and MacRuby
+
 ## Author
 
 Tatsuhiro Ujihisa
