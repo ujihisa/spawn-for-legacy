@@ -101,14 +101,12 @@ class SFL
   end
 end
 
-if RUBY_VERSION < '1.9'
-  def spawn(*x)
-    SFL.new(*x).run
-  end
+def spawn(*x)
+  SFL.new(*x).run
+end
 
-  def Process.spawn(*x)
-    SFL.new(*x).run
-  end
+def Process.spawn(*x)
+  SFL.new(*x).run
 end
 
 if RUBY_VERSION <= '1.8.6'
