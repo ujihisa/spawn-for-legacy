@@ -118,7 +118,7 @@ end
 
 describe 'spawn()' do
   it 'exists' do
-    should be_respond_to(:spawn, true)
+    Kernel.should be_respond_to(:spawn, true)
     Process.should be_respond_to(:spawn, true)
   end
 end
