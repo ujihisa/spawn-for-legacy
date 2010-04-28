@@ -1,6 +1,11 @@
 class SFL
   attr_reader :command, :environment, :argument, :option
 
+  # SFL.new('ls', '-a') becomes
+  #   @environment = {}
+  #   @command = ['ls', 'ls']
+  #   @argument = ['-a']
+  #   @option = {}
   def initialize(*cmdandarg)
     raise ArgumentError if cmdandarg.size == 0
     cmdandarg = cmdandarg.dup
@@ -13,17 +18,19 @@ class SFL
       @environment = {}
     end
 
-    if String === tmp
-      @command = [tmp, tmp]
-    else
-      @command = tmp
-    end
+    @command =
+      if String === tmp
+        [tmp, tmp]
+      else
+        tmp
+      end
 
-    if Hash === cmdandarg.last
-      @option = cmdandarg.pop
-    else
-      @option = {}
-    end
+    @option =
+      if Hash === cmdandarg.last
+        cmdandarg.pop
+      else
+        {}
+      end
 
     @argument = cmdandarg
   end
