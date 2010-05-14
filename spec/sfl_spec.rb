@@ -25,6 +25,13 @@ describe 'SFL.new' do
     subject { SFL.new({"A" => "a"}, "ls", ".", {:out => :err}) }
     it { should == SFL.new({"A" => "a"}, ['ls', 'ls'], '.', {:out => :err}) }
   end
+
+  context 'with argument "ls ."' do
+    subject { SFL.new('ls .') }
+    it { should == SFL.new('ls .') }
+    it { should == SFL.new('ls', '.') }
+    it { should == SFL.new(['ls', 'ls'], '.') }
+  end
 end
 
 describe 'SFL#run' do

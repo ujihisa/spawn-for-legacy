@@ -10,19 +10,11 @@ class SFL
     raise ArgumentError if cmdandarg.size == 0
     cmdandarg = cmdandarg.dup
 
-    tmp = cmdandarg.shift
-    if Hash === tmp
-      @environment = tmp
-      tmp = cmdandarg.shift
-    else
-      @environment = {}
-    end
-
-    @command =
-      if String === tmp
-        [tmp, tmp]
+    @environment =
+      if Hash === cmdandarg.first
+        cmdandarg.shift
       else
-        tmp
+        {}
       end
 
     @option =
@@ -32,7 +24,24 @@ class SFL
         {}
       end
 
-    @argument = cmdandarg
+    if cmdandarg.size == 1
+      cmdandarg = cmdandarg.first
+      if String === cmdandarg
+        # FIXME: this doesn't consider quotes
+        cmd, *arg = cmdandarg.split(/\s+/)
+        @command = [cmd, cmd]
+        @argument = arg
+      else
+        @command = cmdandarg
+        @argument = []
+      end
+    else
+      # 'ls', '.' -> [['ls', 'ls'], '.']
+      cmd = cmdandarg.shift
+      cmd = (String === cmd) ? [cmd, cmd] : cmd
+      @command = cmd
+      @argument = cmdandarg
+    end
   end
 
   def run
