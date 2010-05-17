@@ -123,6 +123,18 @@ describe 'SFL.option_parser' do
   end
 end
 
+describe 'SFL.parse_command_with_arg' do
+  context 'ls .' do
+    subject { SFL.parse_command_with_arg('ls .') }
+    it { should == ['ls', '.'] }
+  end
+
+  context 'ls " "' do
+    subject { SFL.parse_command_with_arg('ls " "') }
+    it { should == ['ls', ' '] }
+  end
+end
+
 describe 'spawn()' do
   it 'exists' do
     Kernel.should be_respond_to(:spawn, true)

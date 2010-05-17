@@ -27,8 +27,7 @@ class SFL
     if cmdandarg.size == 1
       cmdandarg = cmdandarg.first
       if String === cmdandarg
-        # FIXME: this doesn't consider quotes
-        cmd, *arg = cmdandarg.split(/\s+/)
+        cmd, *arg = self.class.parse_command_with_arg(cmdandarg)
         @command = [cmd, cmd]
         @argument = arg
       else
@@ -113,6 +112,39 @@ class SFL
       else
         ast
       end
+    end
+
+    def parse_command_with_arg(x)
+      in_squote = false
+      in_dquote = false
+      tmp = ''
+      cmdargs = []
+      x.strip.split(//).each do |c|
+        case c
+        when '"'
+          if in_dquote
+            in_dquote = false
+          else
+            in_dquote = true
+          end
+        when "'"
+          if in_squote
+            in_squote = false
+          else
+            in_squote = true
+          end
+        when ' '
+          if in_dquote || in_squote
+            tmp << ' '
+          else
+            cmdargs << tmp
+            tmp = ''
+          end
+        else
+          tmp << c
+        end
+      end
+      cmdargs << tmp
     end
   end
 end
