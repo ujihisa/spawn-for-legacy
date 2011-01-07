@@ -67,35 +67,40 @@ class SFL
   end
 
   class << self
+    
+    REDIRECTION_MAPPING = {
+      :out => STDOUT,
+      :err => STDERR,
+    }
+    
+    def redirection_ast(v)
+      case v
+      when Symbol # :out or :err
+        REDIRECTION_MAPPING[v]
+      when String # filename
+        [File, :open, v, 'w']
+      when Array # filename with option
+        [File, :open, v[0], v[1]]
+      when IO
+        v
+      end
+    end
+    
     def option_parser(hash)
-      mapping = {
-        :out => STDOUT,
-        :err => STDERR,
-      }
       result = []
       chdir = hash.delete(:chdir)
       if chdir
         result[0] = [Dir, :chdir, chdir]
       end
       result += hash.map {|k, v|
-        right =
-          case v
-          when Symbol # :out or :err
-            mapping[v]
-          when String # filename
-            [File, :open, v, 'w']
-          when Array # filename with option
-            [File, :open, v[0], v[1]]
-          when IO
-            v
-          end
+        right = redirection_ast(v)
 
         if Symbol === k
-          [[mapping[k], :reopen, right]]
+          [[REDIRECTION_MAPPING[k], :reopen, right]]
         else
           # assuming k is like [:out, :err]
           raise if k.size > 2
-          left1, left2 = *k.map {|i| mapping[i] }
+          left1, left2 = *k.map {|i| REDIRECTION_MAPPING[i] }
           [
             [left1, :reopen, right],
             [left2, :reopen, left1],
