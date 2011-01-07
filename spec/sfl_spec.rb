@@ -56,13 +56,16 @@ describe 'Kernel.spawn' do
         |).should == `ls`
     end
   end
-
-  it 'is asynchronous' do
-    mocker(%q|
-      Kernel.spawn('sh', '-c', 'echo 1; sleep 1; echo 2')
-      sleep 0.1
-      |).should == "1\n"
-  end
+  
+  # The following test is unsound and lead to spec
+  # failures under specific rubies...
+  #
+  # it 'is asynchronous' do
+  #   mocker(%q|
+  #     Kernel.spawn('sh', '-c', 'echo 1; sleep 1; echo 2')
+  #     sleep 0.1
+  #     |).should == "1\n"
+  # end
 
   context 'with environment {"A" => "1"}' do
     it 'outputs with given ENV "1"' do
