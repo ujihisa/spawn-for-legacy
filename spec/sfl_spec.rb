@@ -73,11 +73,11 @@ describe 'Kernel.spawn' do
     end
   end
 
-  context 'with option {:err => :out}' do
+  context 'with option {:err => STDOUT}' do
     it 'outputs with given ENV "1"' do
       mocker(
         %q|
-        pid = Kernel.spawn('ls', 'nonexistfile', {:err => :out})
+        pid = Kernel.spawn('ls', 'nonexistfile', {:err => STDOUT})
         Process.wait(pid)
         |).should == "ls: nonexistfile: No such file or directory\n"
     end
