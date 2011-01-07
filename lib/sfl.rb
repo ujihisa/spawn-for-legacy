@@ -153,12 +153,16 @@ class SFL
   end
 end
 
-def spawn(*x)
-  SFL.new(*x).run
-end
+if RUBY_VERSION <= "1.9"
 
-def Process.spawn(*x)
-  SFL.new(*x).run
+  def Kernel.spawn(*x)
+    SFL.new(*x).run
+  end
+
+  def Process.spawn(*x)
+    SFL.new(*x).run
+  end
+
 end
 
 if RUBY_VERSION <= '1.8.6'
