@@ -56,7 +56,7 @@ describe 'Kernel.spawn' do
         |).should == `ls .`
     end
   end
-  
+
   # The following test is unsound and lead to spec
   # failures under specific rubies...
   #

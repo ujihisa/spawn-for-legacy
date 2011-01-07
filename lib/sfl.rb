@@ -1,8 +1,6 @@
 class SFL
-  
-  # SFL's version number
   VERSION = "2.0.0".freeze
-  
+
   attr_reader :command, :environment, :argument, :option
 
   # SFL.new('ls', '-a') becomes
@@ -67,13 +65,12 @@ class SFL
   end
 
   class << self
-    
     REDIRECTION_MAPPING = {
       :in  => STDIN,
       :out => STDOUT,
       :err => STDERR,
     }
-    
+
     def redirection_ast(v, what_for = :out)
       case v
       when Integer
@@ -90,16 +87,16 @@ class SFL
         v
       end
     end
-    
+
     def option_parser(hash)
       result = []
-      
+
       # changing dir has high priority
       chdir = hash.delete(:chdir)
       if chdir
         result[0] = [Dir, :chdir, chdir]
       end
-      
+
       # other options 
       result += hash.map {|k, v|
         case k
@@ -178,7 +175,6 @@ class SFL
 end
 
 if RUBY_VERSION <= "1.9"
-
   def Kernel.spawn(*x)
     SFL.new(*x).run
   end
@@ -186,7 +182,6 @@ if RUBY_VERSION <= "1.9"
   def Process.spawn(*x)
     SFL.new(*x).run
   end
-
 end
 
 if RUBY_VERSION <= '1.8.6'
