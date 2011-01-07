@@ -1,7 +1,7 @@
 class SFL
   
   # SFL's version number
-  VERSION = "1.3".freeze
+  VERSION = "2.0.0".freeze
   
   attr_reader :command, :environment, :argument, :option
 
@@ -113,11 +113,17 @@ class SFL
           # assuming k is like [:out, :err]
           raise NotImplementedError if k.size > 2
           left1, left2 = *k.map {|i| REDIRECTION_MAPPING[i] }
-          right = redirection_ast(v)
-          [
-            [left1, :reopen, right],
-            [left2, :reopen, left1],
-          ]
+          if right = redirection_ast(v)
+            [
+              [left1, :reopen, right],
+              [left2, :reopen, left1],
+            ]
+          else
+            [
+              [left1, :close],
+              [left2, :close],
+            ]
+          end
         end
       }.flatten(1)
       result
