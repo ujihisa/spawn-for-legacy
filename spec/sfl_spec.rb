@@ -106,6 +106,16 @@ describe 'Kernel.spawn' do
         |).should == ""
     end
   end
+
+  context 'with option {:in => "README.md"}' do
+    it 'outputs README.md' do
+      mocker(
+        %q|
+        pid = Kernel.spawn('cat', {:in => File.expand_path('../../README.md', __FILE__)})
+        Process.wait(pid)
+        |).should =~ /Spawn for Legacy/
+    end
+  end
 end
 
 describe 'SFL.option_parser' do

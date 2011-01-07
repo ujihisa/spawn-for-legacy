@@ -74,7 +74,7 @@ class SFL
       :err => STDERR,
     }
     
-    def redirection_ast(v)
+    def redirection_ast(v, what_for = :out)
       case v
       when Integer
         raise NotImplementedError, "Redirection to integer FD not yet implemented"
@@ -83,7 +83,7 @@ class SFL
       when :in, :out, :err
         REDIRECTION_MAPPING[v]
       when String # filename
-        [File, :open, v, 'w']
+        [File, :open, v, (what_for == :in ? 'r' : 'w')]
       when Array # filename with option
         [File, :open, v[0], v[1]]
       when IO
@@ -103,15 +103,15 @@ class SFL
       # other options 
       result += hash.map {|k, v|
         case k
-        when :out, :err
-          if right = redirection_ast(v)
+        when :in, :out, :err
+          if right = redirection_ast(v, k)
             [[REDIRECTION_MAPPING[k], :reopen, right]]    
           else
             [[REDIRECTION_MAPPING[k], :close]]    
           end
         when Array
           # assuming k is like [:out, :err]
-          raise if k.size > 2
+          raise NotImplementedError if k.size > 2
           left1, left2 = *k.map {|i| REDIRECTION_MAPPING[i] }
           right = redirection_ast(v)
           [
