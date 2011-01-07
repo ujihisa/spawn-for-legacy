@@ -36,9 +36,10 @@ end
 
 describe 'SFL#run' do
   def mocker(code)
+    sfl_expanded = File.expand_path('../../lib/sfl', __FILE__)
     rubyfile = Tempfile.new('-').path
     File.open(rubyfile, 'w') {|io| io.puts <<-"EOF"
-        require '#{File.dirname(__FILE__)}/../lib/sfl'
+        require '#{sfl_expanded}'
       #{code}
       EOF
     }
