@@ -32,6 +32,7 @@ If your ruby is 1.9, `require 'sfl'` doesn't do anything. If your ruby is 1.8, t
 
 ## Supports
 
+* (On MacOS) MRI 1.8.6, 1.8.7, 1.9.1, 1.9.2-rc2 
 * (On UNIX) MRI 1.8.6, 1.8.7, 1.9.1, 1.9.2pre
 * (On Windows) MRI 1.9.1, 1.9.2pre
 
