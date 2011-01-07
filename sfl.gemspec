@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.email = %q{ujihisa at gmail.com}
   s.executables = []
   s.extra_rdoc_files = ["README.md"]
-  s.files = ["lib/sfl.rb", "README.md"]
+  s.files = ["lib/sfl.rb", "README.md", "Rakefile", "sfl.gemspec"]
   s.homepage = %q{https://github.com/ujihisa/spawn-for-legacy}
   s.require_paths = ["lib"]
   s.summary = %q{Spawn For Ruby 1.8}
