@@ -1,2 +1,4 @@
 .DS_Store
 pkg
+spec/mocker.rb
+spec/mocker_output.txt

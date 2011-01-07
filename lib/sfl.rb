@@ -1,7 +1,7 @@
 class SFL
   
   # SFL's version number
-  VERSION = "1.3".freeze
+  VERSION = "2.0.0".freeze
   
   attr_reader :command, :environment, :argument, :option
 
@@ -67,39 +67,63 @@ class SFL
   end
 
   class << self
+    
+    REDIRECTION_MAPPING = {
+      :in  => STDIN,
+      :out => STDOUT,
+      :err => STDERR,
+    }
+    
+    def redirection_ast(v, what_for = :out)
+      case v
+      when Integer
+        raise NotImplementedError, "Redirection to integer FD not yet implemented"
+      when :close
+        nil
+      when :in, :out, :err
+        REDIRECTION_MAPPING[v]
+      when String # filename
+        [File, :open, v, (what_for == :in ? 'r' : 'w')]
+      when Array # filename with option
+        [File, :open, v[0], v[1]]
+      when IO
+        v
+      end
+    end
+    
     def option_parser(hash)
-      mapping = {
-        :out => STDOUT,
-        :err => STDERR,
-      }
       result = []
+      
+      # changing dir has high priority
       chdir = hash.delete(:chdir)
       if chdir
         result[0] = [Dir, :chdir, chdir]
       end
+      
+      # other options 
       result += hash.map {|k, v|
-        right =
-          case v
-          when Symbol # :out or :err
-            mapping[v]
-          when String # filename
-            [File, :open, v, 'w']
-          when Array # filename with option
-            [File, :open, v[0], v[1]]
-          when IO
-            v
+        case k
+        when :in, :out, :err
+          if right = redirection_ast(v, k)
+            [[REDIRECTION_MAPPING[k], :reopen, right]]    
+          else
+            [[REDIRECTION_MAPPING[k], :close]]    
           end
-
-        if Symbol === k
-          [[mapping[k], :reopen, right]]
-        else
+        when Array
           # assuming k is like [:out, :err]
-          raise if k.size > 2
-          left1, left2 = *k.map {|i| mapping[i] }
-          [
-            [left1, :reopen, right],
-            [left2, :reopen, left1],
-          ]
+          raise NotImplementedError if k.size > 2
+          left1, left2 = *k.map {|i| REDIRECTION_MAPPING[i] }
+          if right = redirection_ast(v)
+            [
+              [left1, :reopen, right],
+              [left2, :reopen, left1],
+            ]
+          else
+            [
+              [left1, :close],
+              [left2, :close],
+            ]
+          end
         end
       }.flatten(1)
       result

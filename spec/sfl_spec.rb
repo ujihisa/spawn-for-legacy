@@ -37,13 +37,13 @@ end
 describe 'Kernel.spawn' do
   def mocker(code)
     sfl_expanded = File.expand_path('../../lib/sfl', __FILE__)
-    rubyfile = Tempfile.new('-').path
+    rubyfile = File.expand_path('../mocker.rb', __FILE__) # Tempfile.new('-').path
     File.open(rubyfile, 'w') {|io| io.puts <<-"EOF"
         require '#{sfl_expanded}'
       #{code}
       EOF
     }
-    resultfile = Tempfile.new('-').path
+    resultfile = File.expand_path('../mocker_output.txt', __FILE__) # Tempfile.new('-').path
     system "ruby #{rubyfile} > #{resultfile}"
     File.read(resultfile)
   end
@@ -53,7 +53,7 @@ describe 'Kernel.spawn' do
       mocker(%q|
         pid = Kernel.spawn('ls', '.')
         Process.wait(pid)
-        |).should == `ls`
+        |).should == `ls .`
     end
   end
   
@@ -76,11 +76,11 @@ describe 'Kernel.spawn' do
     end
   end
 
-  context 'with option {:err => STDOUT}' do
+  context 'with option {:err => :out}' do
     it 'outputs with given ENV "1"' do
       mocker(
         %q|
-        pid = Kernel.spawn('ls', 'nonexistfile', {:err => STDOUT})
+        pid = Kernel.spawn('ls', 'nonexistfile', {:err => :out})
         Process.wait(pid)
         |).should == "ls: nonexistfile: No such file or directory\n"
     end
@@ -94,6 +94,36 @@ describe 'Kernel.spawn' do
         Process.wait(pid)
         |).should == ""
       File.read('/tmp/aaaaaaa.txt').should == "123\n"
+    end
+  end
+
+  context 'with option {:out => :close, :err => :close}' do
+    it 'outputs nothing at all' do
+      mocker(
+        %q|
+        pid = Kernel.spawn('echo', '123', {:out => :close, :err => :close})
+        Process.wait(pid)
+        |).should == ""
+    end
+  end
+
+  context 'with option {[:out, :err] => :close}' do
+    it 'outputs nothing at all' do
+      mocker(
+        %q|
+        pid = Kernel.spawn('echo', '123', {[:out, :err] => :close})
+        Process.wait(pid)
+        |).should == ""
+    end
+  end
+
+  context 'with option {:in => "README.md"}' do
+    it 'outputs README.md' do
+      mocker(
+        %q|
+        pid = Kernel.spawn('cat', {:in => File.expand_path('../../README.md', __FILE__)})
+        Process.wait(pid)
+        |).should =~ /Spawn for Legacy/
     end
   end
 end
