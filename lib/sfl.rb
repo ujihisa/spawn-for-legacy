@@ -69,13 +69,18 @@ class SFL
   class << self
     
     REDIRECTION_MAPPING = {
+      :in  => STDIN,
       :out => STDOUT,
       :err => STDERR,
     }
     
     def redirection_ast(v)
       case v
-      when Symbol # :out or :err
+      when Integer
+        raise NotImplementedError, "Redirection to integer FD not yet implemented"
+      when :close
+        raise NotImplementedError, "Redirection to :close not yet implemented"
+      when :in, :out, :err
         REDIRECTION_MAPPING[v]
       when String # filename
         [File, :open, v, 'w']
@@ -88,19 +93,24 @@ class SFL
     
     def option_parser(hash)
       result = []
+      
+      # changing dir has high priority
       chdir = hash.delete(:chdir)
       if chdir
         result[0] = [Dir, :chdir, chdir]
       end
+      
+      # other options 
       result += hash.map {|k, v|
-        right = redirection_ast(v)
-
-        if Symbol === k
-          [[REDIRECTION_MAPPING[k], :reopen, right]]
-        else
+        case k
+        when :out, :err
+          right = redirection_ast(v)
+          [[REDIRECTION_MAPPING[k], :reopen, right]]    
+        when Array
           # assuming k is like [:out, :err]
           raise if k.size > 2
           left1, left2 = *k.map {|i| REDIRECTION_MAPPING[i] }
+          right = redirection_ast(v)
           [
             [left1, :reopen, right],
             [left2, :reopen, left1],
