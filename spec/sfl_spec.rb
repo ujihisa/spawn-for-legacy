@@ -34,7 +34,7 @@ describe 'SFL.new' do
   end
 end
 
-describe 'SFL#run' do
+describe 'Kernel.spawn' do
   def mocker(code)
     sfl_expanded = File.expand_path('../../lib/sfl', __FILE__)
     rubyfile = Tempfile.new('-').path
@@ -51,7 +51,7 @@ describe 'SFL#run' do
   context 'with command "ls", "."' do
     it 'outputs the result of "ls ." on stdout' do
       mocker(%q|
-        pid = SFL.new('ls', '.').run
+        pid = Kernel.spawn('ls', '.')
         Process.wait(pid)
         |).should == `ls`
     end
@@ -59,7 +59,7 @@ describe 'SFL#run' do
 
   it 'is asynchronous' do
     mocker(%q|
-      SFL.new('sh', '-c', 'echo 1; sleep 1; echo 2').run
+      Kernel.spawn('sh', '-c', 'echo 1; sleep 1; echo 2')
       sleep 0.1
       |).should == "1\n"
   end
@@ -67,7 +67,7 @@ describe 'SFL#run' do
   context 'with environment {"A" => "1"}' do
     it 'outputs with given ENV "1"' do
       mocker(%q|
-        pid = SFL.new({'A' => 'a'}, 'ruby', '-e', 'p ENV["A"]').run
+        pid = Kernel.spawn({'A' => 'a'}, 'ruby', '-e', 'p ENV["A"]')
         Process.wait(pid)
         |).should == "a".inspect + "\n"
     end
@@ -77,7 +77,7 @@ describe 'SFL#run' do
     it 'outputs with given ENV "1"' do
       mocker(
         %q|
-        pid = SFL.new('ls', 'nonexistfile', {:err => :out}).run
+        pid = Kernel.spawn('ls', 'nonexistfile', {:err => :out})
         Process.wait(pid)
         |).should == "ls: nonexistfile: No such file or directory\n"
     end
@@ -87,7 +87,7 @@ describe 'SFL#run' do
     it 'outputs with given ENV "1"' do
       mocker(
         %q|
-        pid = SFL.new('echo', '123', {:out => "/tmp/aaaaaaa.txt"}).run
+        pid = Kernel.spawn('echo', '123', {:out => "/tmp/aaaaaaa.txt"})
         Process.wait(pid)
         |).should == ""
       File.read('/tmp/aaaaaaa.txt').should == "123\n"
