@@ -79,7 +79,7 @@ class SFL
       when Integer
         raise NotImplementedError, "Redirection to integer FD not yet implemented"
       when :close
-        raise NotImplementedError, "Redirection to :close not yet implemented"
+        nil
       when :in, :out, :err
         REDIRECTION_MAPPING[v]
       when String # filename
@@ -104,8 +104,11 @@ class SFL
       result += hash.map {|k, v|
         case k
         when :out, :err
-          right = redirection_ast(v)
-          [[REDIRECTION_MAPPING[k], :reopen, right]]    
+          if right = redirection_ast(v)
+            [[REDIRECTION_MAPPING[k], :reopen, right]]    
+          else
+            [[REDIRECTION_MAPPING[k], :close]]    
+          end
         when Array
           # assuming k is like [:out, :err]
           raise if k.size > 2
