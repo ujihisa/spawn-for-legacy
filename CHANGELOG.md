@@ -1,5 +1,7 @@
 # 2.0
 
+Version 2.0 is done completely by Bernard Lambeau. Thanks!
+
 * Enhancements
 
   * Implemented :in redirection, i.e. spawn("...", :in => ...)
