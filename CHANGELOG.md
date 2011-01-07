@@ -1,4 +1,4 @@
-# 2.0.0
+# 2.0
 
 * Enhancements
 
@@ -11,26 +11,26 @@
 * Bugfixes
 
   * Fix the spec suite for ruby version 1.9.2
-  
+
 * Known bugs
 
   * The spec suite may fail under ruby 1.9.1, due to ruby bugs on some spawn redirect options
 
-# 1.2.0
+# 1.2
 
 * Enhancements
 
   * Added support for quoted command arguments and spaces
   * Defined spawn even if the ruby version is 1.9
 
-# 1.1.1
+# 1.1
 
 * Enhancements
 
   * Added Process.spawn in addition to Kernel.spawn
   * Added support for Ruby 1.8.6
-  
-# 1.1.0
+
+# 1.0
 
 * Enhancements
 
