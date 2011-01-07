@@ -96,6 +96,16 @@ describe 'Kernel.spawn' do
       File.read('/tmp/aaaaaaa.txt').should == "123\n"
     end
   end
+
+  context 'with option {:out => :close, :err => :close}' do
+    it 'outputs nothing at all' do
+      mocker(
+        %q|
+        pid = Kernel.spawn('echo', '123', {:out => :close, :err => :close})
+        Process.wait(pid)
+        |).should == ""
+    end
+  end
 end
 
 describe 'SFL.option_parser' do
