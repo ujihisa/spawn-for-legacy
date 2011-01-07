@@ -1,4 +1,8 @@
 class SFL
+  
+  # SFL's version number
+  VERSION = "1.2".freeze
+  
   attr_reader :command, :environment, :argument, :option
 
   # SFL.new('ls', '-a') becomes
