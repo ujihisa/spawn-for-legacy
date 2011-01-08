@@ -1,11 +1,12 @@
-require 'spec/rake/spectask'
+require "rspec/core/rake_task"
 require "rake/gempackagetask"
 
 task :default => :spec
 
-desc "Run specs"
-Spec::Rake::SpecTask.new(:spec) do |t|
-  t.spec_files = FileList['spec/*_spec.rb']
+desc "Run all examples"
+RSpec::Core::RakeTask.new(:spec) do |t|
+	t.rspec_opts = %w[--color]
+	t.verbose = false
 end
 
 desc "Create the .gem package"
