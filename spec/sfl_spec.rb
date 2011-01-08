@@ -82,7 +82,7 @@ describe 'Kernel.spawn' do
         %q|
         pid = Kernel.spawn('ls', 'nonexistfile', {:err => :out})
         Process.wait(pid)
-        |).should == "ls: nonexistfile: No such file or directory\n"
+        |).should =~ /^ls:/
     end
   end
 
