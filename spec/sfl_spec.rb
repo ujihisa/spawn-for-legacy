@@ -171,7 +171,10 @@ end
 
 describe 'spawn()' do
   it 'exists' do
-    Kernel.should be_respond_to(:spawn, true)
-    Process.should be_respond_to(:spawn, true)
+    Kernel.respond_to?(:spawn).should be_true
+    Process.respond_to?(:spawn).should be_true
+  end
+  it 'is callable' do
+    lambda{ Process.wait spawn("ruby -e 'true'") }.should_not raise_error
   end
 end
