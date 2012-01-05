@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.summary = %q{Spawn For Ruby 1.8}
   s.description = %q{Spawn For Ruby 1.8}
   
-  s.author = 'ujihisa'
+  s.authors = %w[ujihisa blambeau]
   s.email  = %q{ujihisa at gmail.com}
   
   s.files = 
