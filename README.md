@@ -41,7 +41,10 @@ Currently there are no supports on:
 * MRI 1.8 on Windows
 * Other Ruby implementations such as JRuby, Rubinius and MacRuby
 
-## Author
+## Authors
 
 Tatsuhiro Ujihisa
 <http://ujihisa.blogspot.com/>
+
+Bernard Lambeau
+<http://revision-zero.org/>
