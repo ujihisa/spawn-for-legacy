@@ -1,5 +1,5 @@
 class SFL
-  VERSION = "2.0".freeze
+  VERSION = "2.1".freeze
 
   attr_reader :command, :environment, :argument, :option
 
