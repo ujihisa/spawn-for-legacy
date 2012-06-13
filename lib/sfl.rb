@@ -181,7 +181,7 @@ class SFL
   end
 end
 
-if RUBY_VERSION <= "1.9"
+if RUBY_VERSION < "1.9"
   def Kernel.spawn(*x)
     SFL.new(*x).run
   end
