@@ -1,6 +1,8 @@
 class SFL
   VERSION = "2.1".freeze
 
+  SHELL_SPECIALS = %r([\*\?\{\}\[\]<>\(\)~&\|\\\$;'`"\n])m.freeze
+
   attr_reader :command, :environment, :argument, :option
 
   # SFL.new('ls', '-a') becomes
@@ -29,9 +31,14 @@ class SFL
     if cmdandarg.size == 1
       cmdandarg = cmdandarg.first
       if String === cmdandarg
-        cmd, *arg = self.class.parse_command_with_arg(cmdandarg)
-        @command = [cmd, cmd]
-        @argument = arg
+        if SHELL_SPECIALS === cmdandarg
+          @command = cmdandarg
+          @argument = []
+        else
+          cmd, *arg = self.class.parse_command_with_arg(cmdandarg)
+          @command = [cmd, cmd]
+          @argument = arg
+        end
       else
         @command = cmdandarg
         @argument = []

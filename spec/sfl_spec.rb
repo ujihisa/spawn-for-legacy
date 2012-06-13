@@ -57,6 +57,34 @@ describe 'Kernel.spawn' do
     end
   end
 
+  context 'with command "echo ahi"' do
+    it 'outputs "ahi" on stdout' do
+      mocker(%q|
+        pid = Kernel.spawn('echo ahi')
+        Process.wait(pid)
+        |).chomp.should == "ahi"
+    end
+  end
+
+  context 'with command "true && echo ahi"' do
+    it 'outputs "ahi" on stdout' do
+      mocker(%q|
+        pid = Kernel.spawn('true && echo ahi')
+        Process.wait(pid)
+        |).chomp.should == "ahi"
+    end
+  end
+
+  context 'with command "false || :"' do
+    it 'does not fail' do
+      mocker(%q[
+        pid = Kernel.spawn('false || :')
+        Process.wait(pid)
+        puts 'ahi' if $?.to_i == 0
+        ]).chomp.should == "ahi"
+    end
+  end
+
   # The following test is unsound and lead to spec
   # failures under specific rubies...
   #
