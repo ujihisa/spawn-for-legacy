@@ -1,3 +1,28 @@
+# 2.2
+
+* Enhancements
+
+ * Supported shell special characters in a command line string.
+
+* Bugfixes
+
+ * Fix the spec suite for ruby version 1.9.2
+ * Stop to overwrite Kernel.spawn and Process.spawn for ruby version 1.9
+
+* Known bugs
+
+ * The spec suite may fail under ruby 1.9.1, due to ruby bugs on some spawn redirect options
+
+# 2.1
+
+* Enhancements
+
+  Added dual licence: Ruby's and 2-clause BSDL along with MRI.
+
+* Bugfixes
+
+  * Resurected Kernel#spawn that was missing in previous release.
+
 # 2.0
 
 Version 2.0 is done completely by Bernard Lambeau. Thanks!
