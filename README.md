@@ -48,3 +48,6 @@ Tatsuhiro Ujihisa
 
 Bernard Lambeau
 <http://revision-zero.org/>
+
+Kenta Murata
+<http://mrkn.jp/>
