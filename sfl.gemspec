@@ -1,4 +1,8 @@
-require File.expand_path('../lib/sfl', __FILE__)
+libdir = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift libdir unless $LOAD_PATH.include? libdir
+
+require 'sfl'
+
 Gem::Specification.new do |s|
   s.name = %q{sfl}
   s.version = SFL::VERSION.dup
