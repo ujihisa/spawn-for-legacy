@@ -37,13 +37,13 @@ end
 describe 'Kernel.spawn' do
   def mocker(code)
     sfl_expanded = File.expand_path('../../lib/sfl', __FILE__)
-    rubyfile = File.expand_path('../mocker.rb', __FILE__) # Tempfile.new('-').path
+    rubyfile = File.expand_path(Dir.tmpdir, 'mocker.rb')
     File.open(rubyfile, 'w') {|io| io.puts <<-"EOF"
         require '#{sfl_expanded}'
       #{code}
       EOF
     }
-    resultfile = File.expand_path('../mocker_output.txt', __FILE__) # Tempfile.new('-').path
+    resultfile = File.expand_path(Dir.tmpdir, '../mocker_output.txt')
     system "ruby #{rubyfile} > #{resultfile}"
     File.read(resultfile)
   end
@@ -114,14 +114,15 @@ describe 'Kernel.spawn' do
     end
   end
 
-  context 'with option {:out => "/tmp/aaaaaaa.txt"}' do
+  context 'with option {:out => "$TMPDIR/aaaaaaa.txt"}' do
     it 'outputs with given ENV "1"' do
+      tmpfile_path = File.expand_path(Dir.tmpdir, "aaaaaaa.txt")
       mocker(
         %q|
-        pid = Kernel.spawn('echo', '123', {:out => "/tmp/aaaaaaa.txt"})
+        pid = Kernel.spawn('echo', '123', {:out => tmpfile_path})
         Process.wait(pid)
         |).should == ""
-      File.read('/tmp/aaaaaaa.txt').should == "123\n"
+      File.read(tmpfile_path).should == "123\n"
     end
   end
 
