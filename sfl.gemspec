@@ -6,6 +6,7 @@ require 'sfl'
 Gem::Specification.new do |s|
   s.name = %q{sfl}
   s.version = SFL::VERSION.dup
+  s.license = 'Ruby'
   s.date = Time.now.strftime('%Y-%m-%d')  
 
   s.summary = %q{Spawn For Ruby 1.8}
@@ -17,7 +18,7 @@ Gem::Specification.new do |s|
   s.files = 
     Dir['lib/**/*'] +
     Dir['spec/**/*'] +
-    %w{ sfl.gemspec Rakefile README.md CHANGELOG.md }
+    %w{ sfl.gemspec Rakefile README.md CHANGELOG.md LICENCE.md}
     
   s.require_paths = ["lib"]
   s.executables = []

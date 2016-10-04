@@ -1,5 +1,5 @@
 class SFL
-  VERSION = "2.2".freeze
+  VERSION = "2.3".freeze
 
   SHELL_SPECIALS = %r([\*\?\{\}\[\]<>\(\)~&\|\\\$;'`"\n])m.freeze
 

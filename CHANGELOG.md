@@ -1,3 +1,12 @@
+# 2.3
+
+* Make Licence explicit
+  * Specify licence in gemspec file
+  * Embed LICENCE.md in the gem package
+  * Insert full licencing text in LICENCE.md
+  * Note that licence itself it unchanged; It's Ruby's, which means
+    dual-licence of 2-clause BSDL / the Ruby licence.
+
 # 2.2
 
 * Enhancements
