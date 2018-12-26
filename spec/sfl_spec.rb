@@ -37,13 +37,13 @@ end
 describe 'Kernel.spawn' do
   def mocker(code)
     sfl_expanded = File.expand_path('../../lib/sfl', __FILE__)
-    rubyfile = File.expand_path(Dir.tmpdir, 'mocker.rb')
+    rubyfile = File.expand_path(Dir.tmpdir) + '/mocker.rb'
     File.open(rubyfile, 'w') {|io| io.puts <<-"EOF"
         require '#{sfl_expanded}'
       #{code}
       EOF
     }
-    resultfile = File.expand_path(Dir.tmpdir, '../mocker_output.txt')
+    resultfile = File.expand_path(Dir.tmpdir) + '/mocker_output.txt'
     system "ruby #{rubyfile} > #{resultfile}"
     File.read(resultfile)
   end
@@ -116,10 +116,10 @@ describe 'Kernel.spawn' do
 
   context 'with option {:out => "$TMPDIR/aaaaaaa.txt"}' do
     it 'outputs with given ENV "1"' do
-      tmpfile_path = File.expand_path(Dir.tmpdir, "aaaaaaa.txt")
+      tmpfile_path = File.expand_path(Dir.tmpdir) + '/aaaaaaa.txt'
       mocker(
-        %q|
-        pid = Kernel.spawn('echo', '123', {:out => tmpfile_path})
+        %Q|
+        pid = Kernel.spawn('echo', '123', {:out => '#{tmpfile_path}'})
         Process.wait(pid)
         |).should == ""
       File.read(tmpfile_path).should == "123\n"
@@ -149,8 +149,8 @@ describe 'Kernel.spawn' do
   context 'with option {:in => "README.md"}' do
     it 'outputs README.md' do
       mocker(
-        %q|
-        pid = Kernel.spawn('cat', {:in => File.expand_path('../../README.md', __FILE__)})
+        %Q|
+        pid = Kernel.spawn('cat', {:in => File.expand_path('../../README.md', '#{__FILE__}')})
         Process.wait(pid)
         |).should =~ /Spawn for Legacy/
     end
